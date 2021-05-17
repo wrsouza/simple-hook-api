@@ -1,24 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { FC, useCallback, useEffect } from 'react'
+import usePosts from './hooks/usePosts';
 
-function App() {
+const App: FC = () => {
+  const { posts, getPosts } = usePosts();
+
+  const getList = useCallback(async () => {
+    await getPosts()
+  }, [getPosts])
+
+  useEffect(() => {
+    getList()
+  }, [getList])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Posts</h1>
+      <ul>
+        {posts.map(post => (
+          <li key={post.id}>
+            <h3>{post.title}</h3>
+            <p>{post.body}</p>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
